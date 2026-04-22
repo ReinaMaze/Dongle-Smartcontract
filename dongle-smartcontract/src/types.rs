@@ -1,4 +1,4 @@
-use soroban_sdk::{Address, String, contracttype};
+use soroban_sdk::{contracttype, Address, String};
 
 #[contracttype]
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -6,7 +6,7 @@ pub struct Review {
     pub project_id: u64,
     pub reviewer: Address,
     pub rating: u32,
-    pub comment_cid: Option<String>,
+    pub ipfs_cid: Option<String>,
 }
 
 #[contracttype]
@@ -24,7 +24,7 @@ pub struct ReviewEventData {
     pub reviewer: Address,
     pub action: ReviewAction,
     pub timestamp: u64,
-    pub comment_cid: Option<String>,
+    pub ipfs_cid: Option<String>,
 }
 
 #[contracttype]
@@ -44,6 +44,7 @@ pub enum DataKey {
     Treasury,
 }
 
+#[contracttype]
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum VerificationStatus {
     Pending,

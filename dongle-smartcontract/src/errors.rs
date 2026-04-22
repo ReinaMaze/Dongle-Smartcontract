@@ -42,5 +42,9 @@ pub enum ContractError {
     /// Treasury address not set
     TreasuryNotSet = 18,
     /// User has already reviewed this project
-    AlreadyReviewed = 19, // I added your error here with a new unique ID
+    AlreadyReviewed = 19,
+    /// Duplicate review submission for same project and reviewer
+    DuplicateReview = 20,
+    /// Caller is not the owner of the targeted review
+    NotReviewOwner = 21,
 }

@@ -1,5 +1,5 @@
 use crate::types::{ReviewAction, ReviewEventData};
-use soroban_sdk::{Address, Env, String, Symbol, symbol_short};
+use soroban_sdk::{symbol_short, Address, Env, String, Symbol};
 
 pub const REVIEW: Symbol = symbol_short!("REVIEW");
 
@@ -8,14 +8,14 @@ pub fn publish_review_event(
     project_id: u64,
     reviewer: Address,
     action: ReviewAction,
-    comment_cid: Option<String>,
+    ipfs_cid: Option<String>,
 ) {
     let event_data = ReviewEventData {
         project_id,
         reviewer: reviewer.clone(),
         action: action.clone(),
         timestamp: env.ledger().timestamp(),
-        comment_cid,
+        ipfs_cid,
     };
 
     let action_sym = match action {
