@@ -42,6 +42,14 @@ pub enum ContractError {
     /// Fee configuration not set
     FeeConfigNotSet = 18,
     /// Treasury address not set
+    TreasuryNotSet = 18,
+    /// User has already reviewed this project
+    AlreadyReviewed = 19,
+    /// Duplicate review submission for same project and reviewer
+    DuplicateReview = 20,
+    /// Caller is not the owner of the targeted review
+    NotReviewOwner = 21,
+}
     TreasuryNotSet = 19,
     /// Review already deleted
     ReviewAlreadyDeleted = 20,

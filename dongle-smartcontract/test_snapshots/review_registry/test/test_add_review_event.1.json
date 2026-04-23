@@ -81,6 +81,7 @@
         {
           "function": {
             "contract_fn": {
+              "contract_address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4",
               "contract_address": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHK3M",
               "function_name": "add_review",
               "args": [
@@ -120,6 +121,7 @@
             "contract": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD2KM",
             "key": {
               "ledger_key_nonce": {
+                "nonce": 801925984706572462
                 "nonce": 5541220902715666415
               }
             },
@@ -135,6 +137,7 @@
                 "contract": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD2KM",
                 "key": {
                   "ledger_key_nonce": {
+                    "nonce": 801925984706572462
                     "nonce": 5541220902715666415
                   }
                 },
@@ -678,6 +681,7 @@
             "data": {
               "contract_data": {
                 "ext": "v0",
+                "contract": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4",
                 "contract": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHK3M",
                 "key": {
                   "vec": [
@@ -697,6 +701,7 @@
                   "map": [
                     {
                       "key": {
+                        "symbol": "ipfs_cid"
                         "symbol": "comment_cid"
                       },
                       "val": {
@@ -755,6 +760,7 @@
       [
         {
           "contract_data": {
+            "contract": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCT4",
             "contract": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHK3M",
             "key": {
               "vec": [
@@ -1103,7 +1109,7 @@
                 },
                 {
                   "key": {
-                    "symbol": "comment_cid"
+                    "symbol": "ipfs_cid"
                   },
                   "val": {
                     "string": "QmHash"
