@@ -1,6 +1,7 @@
 target/
 dongle-smartcontract/target/
 dongle-smartcontract/Cargo.lock
+test_snapshots/
 # Build / error logs (don't commit)
 dongle-smartcontract/build_error*.log
 dongle-smartcontract/build_errors*.log

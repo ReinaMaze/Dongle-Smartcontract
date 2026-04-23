@@ -20,16 +20,7 @@ mod verification_registry;
 pub mod types;
 
 #[cfg(test)]
-mod test;
-
-#[cfg(test)]
-mod admin_tests;
-
-#[cfg(test)]
-mod registration_tests;
-
-#[cfg(test)]
-mod verification_tests;
+mod tests;
 
 use crate::admin_manager::AdminManager;
 use crate::errors::ContractError;
