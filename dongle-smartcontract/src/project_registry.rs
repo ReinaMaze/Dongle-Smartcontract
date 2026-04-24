@@ -1,7 +1,11 @@
 use crate::errors::ContractError;
+use crate::events::{publish_project_registered_event, publish_project_updated_event};
 use crate::storage_keys::StorageKey;
 use crate::types::{Project, ProjectRegistrationParams, ProjectUpdateParams, VerificationStatus};
 use soroban_sdk::{Address, Env, Vec};
+
+/// Maximum number of items returned per paginated list call.
+pub const MAX_PAGE_LIMIT: u32 = 100;
 
 pub struct ProjectRegistry;
 
@@ -72,7 +76,15 @@ impl ProjectRegistry {
         owner_projects.push_back(count);
         env.storage()
             .persistent()
-            .set(&StorageKey::OwnerProjects(params.owner), &owner_projects);
+            .set(&StorageKey::OwnerProjects(params.owner.clone()), &owner_projects);
+
+        publish_project_registered_event(
+            env,
+            count,
+            params.owner,
+            project.name.clone(),
+            project.category.clone(),
+        );
 
         Ok(count)
     }
@@ -108,6 +120,8 @@ impl ProjectRegistry {
         env.storage()
             .persistent()
             .set(&StorageKey::Project(params.project_id), &project);
+
+        publish_project_updated_event(env, params.project_id, project.owner.clone());
 
         Some(project)
     }
@@ -151,6 +165,13 @@ impl ProjectRegistry {
     }
 
     pub fn list_projects(env: &Env, start_id: u64, limit: u32) -> Vec<Project> {
+        // Enforce pagination limits: limit must be 1..=MAX_PAGE_LIMIT
+        let effective_limit = if limit == 0 || limit > MAX_PAGE_LIMIT {
+            MAX_PAGE_LIMIT
+        } else {
+            limit
+        };
+
         let count: u64 = env
             .storage()
             .persistent()
@@ -158,14 +179,23 @@ impl ProjectRegistry {
             .unwrap_or(0);
 
         let mut projects = Vec::new(env);
-        if start_id == 0 || start_id > count {
+        if count == 0 {
             return projects;
         }
+
+        // start_id is 1-based (projects are stored with IDs starting at 1).
+        // Clamp to valid range.
+        let first = if start_id == 0 { 1u64 } else { start_id };
+        if first > count {
+            return projects;
+        }
+
         let end = core::cmp::min(
-            start_id.saturating_add(limit as u64),
+            first.saturating_add(effective_limit as u64),
             count.saturating_add(1),
         );
-        for id in start_id..end {
+
+        for id in first..end {
             if let Some(project) = Self::get_project(env, id) {
                 projects.push_back(project);
             }

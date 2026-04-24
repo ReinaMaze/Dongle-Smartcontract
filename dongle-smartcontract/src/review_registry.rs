@@ -266,6 +266,14 @@ impl ReviewRegistry {
     }
 
     pub fn list_reviews(env: &Env, project_id: u64, start_id: u32, limit: u32) -> Vec<Review> {
+        // Enforce pagination limits: limit must be 1..=MAX_PAGE_LIMIT
+        const MAX_PAGE_LIMIT: u32 = 100;
+        let effective_limit = if limit == 0 || limit > MAX_PAGE_LIMIT {
+            MAX_PAGE_LIMIT
+        } else {
+            limit
+        };
+
         let reviewers: Vec<Address> = env
             .storage()
             .persistent()
@@ -274,7 +282,10 @@ impl ReviewRegistry {
 
         let mut reviews = Vec::new(env);
         let len = reviewers.len();
-        let end = core::cmp::min(start_id.saturating_add(limit), len);
+        if start_id >= len {
+            return reviews;
+        }
+        let end = core::cmp::min(start_id.saturating_add(effective_limit), len);
 
         for i in start_id..end {
             if let Some(reviewer) = reviewers.get(i) {

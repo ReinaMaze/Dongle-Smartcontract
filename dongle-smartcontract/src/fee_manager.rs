@@ -68,7 +68,7 @@ impl FeeManager {
             .persistent()
             .set(&StorageKey::FeePaidForProject(project_id), &true);
 
-        publish_fee_paid_event(env, project_id, amount);
+        publish_fee_paid_event(env, project_id, payer, amount);
         Ok(())
     }
 
