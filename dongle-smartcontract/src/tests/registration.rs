@@ -102,4 +102,3 @@ fn test_register_different_projects_success() {
     let id2 = client.register_project(&params2);
     assert_eq!(id2, 2);
 }
-

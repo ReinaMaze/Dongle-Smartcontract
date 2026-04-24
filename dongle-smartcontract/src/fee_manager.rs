@@ -100,6 +100,7 @@ impl FeeManager {
     }
 
     /// Set the treasury address (admin only)
+    #[allow(dead_code)]
     pub fn set_treasury(env: &Env, admin: Address, treasury: Address) -> Result<(), ContractError> {
         admin.require_auth();
         AdminManager::require_admin(env, &admin)?;
@@ -111,6 +112,7 @@ impl FeeManager {
     }
 
     /// Get the current treasury address
+    #[allow(dead_code)]
     pub fn get_treasury(env: &Env) -> Result<Address, ContractError> {
         env.storage()
             .persistent()

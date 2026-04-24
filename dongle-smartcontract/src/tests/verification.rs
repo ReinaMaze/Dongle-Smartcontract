@@ -37,7 +37,9 @@ fn test_verification_lifecycle() {
 
     // 3. Pay fee (using owner)
     let token_admin = Address::generate(&env);
-    let token_address = env.register_stellar_asset_contract_v2(token_admin).address();
+    let token_address = env
+        .register_stellar_asset_contract_v2(token_admin)
+        .address();
     client.set_fee(&admin, &Some(token_address.clone()), &100, &admin);
 
     // Mock token balance for owner
@@ -82,7 +84,9 @@ fn test_reject_verification() {
 
     // Set fee and pay
     let token_admin = Address::generate(&env);
-    let token_address = env.register_stellar_asset_contract_v2(token_admin).address();
+    let token_address = env
+        .register_stellar_asset_contract_v2(token_admin)
+        .address();
     let token_client = soroban_sdk::token::StellarAssetClient::new(&env, &token_address);
     token_client.mint(&owner, &100);
     client.set_fee(&admin, &Some(token_address.clone()), &100, &admin);
@@ -100,4 +104,3 @@ fn test_reject_verification() {
     let project = client.get_project(&project_id).unwrap();
     assert_eq!(project.verification_status, VerificationStatus::Rejected);
 }
-

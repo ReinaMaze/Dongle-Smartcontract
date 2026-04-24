@@ -3,6 +3,7 @@ use soroban_sdk::{symbol_short, Address, Env, String, Symbol};
 
 pub const REVIEW: Symbol = symbol_short!("REVIEW");
 
+#[allow(clippy::too_many_arguments)]
 pub fn publish_review_event(
     env: &Env,
     project_id: u64,
@@ -55,7 +56,7 @@ pub fn publish_verification_requested_event(
     requester: Address,
     evidence_cid: String,
 ) {
-     env.events().publish(
+    env.events().publish(
         (symbol_short!("VERIFY"), symbol_short!("REQ"), project_id),
         (requester, evidence_cid),
     );

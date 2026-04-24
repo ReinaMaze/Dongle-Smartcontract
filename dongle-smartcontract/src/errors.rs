@@ -7,7 +7,7 @@ use soroban_sdk::contracterror;
 pub enum ContractError {
     /// Project not found
     ProjectNotFound = 1,
-    /// Unauthorized access - caller is not the owner
+    /// Unauthorized access - caller is not permitted
     Unauthorized = 2,
     /// Project already exists
     ProjectAlreadyExists = 3,
@@ -15,58 +15,32 @@ pub enum ContractError {
     InvalidRating = 4,
     /// Review not found
     ReviewNotFound = 5,
-    /// Review already exists
-    ReviewAlreadyExists = 6,
-    /// Verification record not found
-    VerificationNotFound = 7,
-    /// Invalid verification status transition
-    InvalidStatusTransition = 8,
-    /// Only admin can perform this action
-    AdminOnly = 9,
-    /// Invalid fee amount
-    InvalidFeeAmount = 10,
-    /// Insufficient fee paid
-    InsufficientFee = 11,
-    /// Invalid project data - missing required fields
-    InvalidProjectData = 12,
-    /// Project name too long
-    ProjectNameTooLong = 13,
-    /// Project description too long
-    ProjectDescriptionTooLong = 14,
-    /// Invalid project category
-    InvalidProjectCategory = 15,
-    /// Verification already processed
-    VerificationAlreadyProcessed = 16,
-    /// Cannot review own project
-    CannotReviewOwnProject = 17,
-    /// Fee configuration not set
-    FeeConfigNotSet = 18,
-    /// Treasury address not set
-    TreasuryNotSet = 18,
-    /// User has already reviewed this project
-    AlreadyReviewed = 19,
     /// Duplicate review submission for same project and reviewer
-    DuplicateReview = 20,
+    DuplicateReview = 6,
     /// Caller is not the owner of the targeted review
-    NotReviewOwner = 21,
-}
-    TreasuryNotSet = 19,
-    /// Review already deleted
-    ReviewAlreadyDeleted = 20,
+    NotReviewOwner = 7,
+    /// Verification record not found
+    VerificationNotFound = 8,
+    /// Invalid verification status transition
+    InvalidStatusTransition = 9,
+    /// Only admin can perform this action
+    AdminOnly = 10,
+    /// Fee configuration not set
+    FeeConfigNotSet = 11,
+    /// Treasury address not set
+    TreasuryNotSet = 12,
+    /// Insufficient fee paid
+    InsufficientFee = 13,
+    /// Invalid project data - missing required fields
+    InvalidProjectData = 14,
+    /// Project name too long
+    ProjectNameTooLong = 15,
     /// Invalid project name format
-    InvalidProjectNameFormat = 21,
-    /// Not the reviewer
-    NotReviewer = 22,
-    /// Already reviewed
-    AlreadyReviewed = 23,
+    InvalidProjectNameFormat = 16,
     /// Cannot remove last admin
-    CannotRemoveLastAdmin = 24,
+    CannotRemoveLastAdmin = 17,
     /// Admin not found
-    AdminNotFound = 25,
-    /// Record not found (generic)
-    RecordNotFound = 26,
-    /// Duplicate review error variant (sometimes used separately)
-    DuplicateReview = 27,
+    AdminNotFound = 18,
 }
 
 // Legacy alias to avoid breaking any code that uses `Error` directly

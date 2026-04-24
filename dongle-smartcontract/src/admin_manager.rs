@@ -135,9 +135,9 @@ impl AdminManager {
 
 #[cfg(test)]
 mod tests {
+    use crate::errors::ContractError;
     use crate::DongleContract;
     use crate::DongleContractClient;
-    use crate::errors::ContractError;
     use soroban_sdk::{testutils::Address as _, Address, Env};
 
     #[test]
@@ -178,7 +178,9 @@ mod tests {
         let new_admin = Address::generate(&env);
 
         client.mock_all_auths().initialize(&admin);
-        let result = client.mock_all_auths().try_add_admin(&non_admin, &new_admin);
+        let result = client
+            .mock_all_auths()
+            .try_add_admin(&non_admin, &new_admin);
 
         assert_eq!(result, Err(Ok(ContractError::AdminOnly)));
         assert!(!client.is_admin(&new_admin));

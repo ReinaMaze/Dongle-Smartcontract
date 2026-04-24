@@ -1,23 +1,16 @@
 #![no_std]
 
+mod admin_manager;
 pub mod constants;
 pub mod errors;
 pub mod events;
+mod fee_manager;
+mod project_registry;
 pub mod rating_calculator;
 pub mod review_registry;
 pub mod storage_keys;
 pub mod types;
-mod admin_manager;
-mod constants;
-pub mod errors;
-mod events;
-mod fee_manager;
-mod project_registry;
-mod rating_calculator;
-mod review_registry;
-mod storage_keys;
 mod verification_registry;
-pub mod types;
 
 #[cfg(test)]
 mod tests;

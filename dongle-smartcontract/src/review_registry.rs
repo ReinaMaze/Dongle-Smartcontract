@@ -65,15 +65,15 @@ impl ReviewRegistry {
 
         // Update aggregate stats
         let stats_key = StorageKey::ProjectStats(project_id);
-        let stats: ProjectStats = env
-            .storage()
-            .persistent()
-            .get(&stats_key)
-            .unwrap_or(ProjectStats {
-                rating_sum: 0,
-                review_count: 0,
-                average_rating: 0,
-            });
+        let stats: ProjectStats =
+            env.storage()
+                .persistent()
+                .get(&stats_key)
+                .unwrap_or(ProjectStats {
+                    rating_sum: 0,
+                    review_count: 0,
+                    average_rating: 0,
+                });
         let (new_sum, new_count, new_avg) =
             RatingCalculator::add_rating(stats.rating_sum, stats.review_count, rating);
         env.storage().persistent().set(
@@ -131,17 +131,21 @@ impl ReviewRegistry {
 
         // Update aggregate stats
         let stats_key = StorageKey::ProjectStats(project_id);
-        let mut stats: ProjectStats = env
-            .storage()
-            .persistent()
-            .get(&stats_key)
-            .unwrap_or(ProjectStats {
-                rating_sum: 0,
-                review_count: 0,
-                average_rating: 0,
-            });
-        let (new_sum, _new_count, new_avg) =
-            RatingCalculator::update_rating(stats.rating_sum, stats.review_count, old_rating, rating);
+        let mut stats: ProjectStats =
+            env.storage()
+                .persistent()
+                .get(&stats_key)
+                .unwrap_or(ProjectStats {
+                    rating_sum: 0,
+                    review_count: 0,
+                    average_rating: 0,
+                });
+        let (new_sum, _new_count, new_avg) = RatingCalculator::update_rating(
+            stats.rating_sum,
+            stats.review_count,
+            old_rating,
+            rating,
+        );
         stats.rating_sum = new_sum;
         stats.average_rating = new_avg;
         env.storage().persistent().set(&stats_key, &stats);
@@ -182,18 +186,21 @@ impl ReviewRegistry {
 
         // Update aggregate stats
         let stats_key = StorageKey::ProjectStats(project_id);
-        let mut stats: ProjectStats = env
-            .storage()
-            .persistent()
-            .get(&stats_key)
-            .unwrap_or(ProjectStats {
-                rating_sum: 0,
-                review_count: 0,
-                average_rating: 0,
-            });
+        let mut stats: ProjectStats =
+            env.storage()
+                .persistent()
+                .get(&stats_key)
+                .unwrap_or(ProjectStats {
+                    rating_sum: 0,
+                    review_count: 0,
+                    average_rating: 0,
+                });
         if stats.review_count > 0 {
-            let (new_sum, new_count, new_avg) =
-                RatingCalculator::remove_rating(stats.rating_sum, stats.review_count, existing.rating);
+            let (new_sum, new_count, new_avg) = RatingCalculator::remove_rating(
+                stats.rating_sum,
+                stats.review_count,
+                existing.rating,
+            );
             stats.rating_sum = new_sum;
             stats.review_count = new_count;
             stats.average_rating = new_avg;
@@ -214,9 +221,10 @@ impl ReviewRegistry {
                 }
             }
         }
-        env.storage()
-            .persistent()
-            .set(&StorageKey::UserReviews(reviewer.clone()), &new_user_reviews);
+        env.storage().persistent().set(
+            &StorageKey::UserReviews(reviewer.clone()),
+            &new_user_reviews,
+        );
 
         // Remove from project reviewer index
         let project_reviews: Vec<Address> = env
@@ -232,9 +240,10 @@ impl ReviewRegistry {
                 }
             }
         }
-        env.storage()
-            .persistent()
-            .set(&StorageKey::ProjectReviews(project_id), &new_project_reviews);
+        env.storage().persistent().set(
+            &StorageKey::ProjectReviews(project_id),
+            &new_project_reviews,
+        );
 
         let now = env.ledger().timestamp();
         publish_review_event(
