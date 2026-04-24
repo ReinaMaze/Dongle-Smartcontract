@@ -74,9 +74,10 @@ impl ProjectRegistry {
             .get(&StorageKey::OwnerProjects(params.owner.clone()))
             .unwrap_or_else(|| Vec::new(env));
         owner_projects.push_back(count);
-        env.storage()
-            .persistent()
-            .set(&StorageKey::OwnerProjects(params.owner.clone()), &owner_projects);
+        env.storage().persistent().set(
+            &StorageKey::OwnerProjects(params.owner.clone()),
+            &owner_projects,
+        );
 
         publish_project_registered_event(
             env,

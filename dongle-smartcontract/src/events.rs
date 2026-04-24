@@ -240,10 +240,8 @@ pub fn publish_admin_added_event(env: &Env, admin: Address) {
         admin,
         timestamp: env.ledger().timestamp(),
     };
-    env.events().publish(
-        (symbol_short!("ADMIN"), symbol_short!("ADDED")),
-        event_data,
-    );
+    env.events()
+        .publish((symbol_short!("ADMIN"), symbol_short!("ADDED")), event_data);
 }
 
 pub fn publish_admin_removed_event(env: &Env, admin: Address) {

@@ -130,7 +130,11 @@ fn test_list_projects_limit_zero_uses_max() {
 
     // limit=0 should fall back to MAX_PAGE_LIMIT (100), returning all 5
     let result = client.list_projects(&1, &0);
-    assert_eq!(result.len(), 5, "limit=0 should use max limit and return all projects");
+    assert_eq!(
+        result.len(),
+        5,
+        "limit=0 should use max limit and return all projects"
+    );
 }
 
 #[test]
@@ -152,7 +156,11 @@ fn test_list_projects_limit_over_max_clamped() {
 
     // limit=9999 should be clamped to MAX_PAGE_LIMIT (100), returning all 5
     let result = client.list_projects(&1, &9999);
-    assert_eq!(result.len(), 5, "limit over max should be clamped to MAX_PAGE_LIMIT");
+    assert_eq!(
+        result.len(),
+        5,
+        "limit over max should be clamped to MAX_PAGE_LIMIT"
+    );
 }
 
 #[test]
@@ -386,5 +394,9 @@ fn test_list_reviews_all_pages_cover_all_reviews() {
         start += page_size;
     }
 
-    assert_eq!(all_reviews.len(), 5, "paginating through all pages should yield all 5 reviews");
+    assert_eq!(
+        all_reviews.len(),
+        5,
+        "paginating through all pages should yield all 5 reviews"
+    );
 }
