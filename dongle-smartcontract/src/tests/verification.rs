@@ -4,7 +4,7 @@ use crate::DongleContractClient;
 use soroban_sdk::{testutils::Address as _, Address, Env, String};
 
 fn setup(env: &Env) -> (DongleContractClient<'_>, Address, Address) {
-    let contract_id = env.register_contract(None, DongleContract);
+    let contract_id = env.register(DongleContract, ());
     let client = DongleContractClient::new(env, &contract_id);
     let admin = Address::generate(env);
     client.initialize(&admin);
