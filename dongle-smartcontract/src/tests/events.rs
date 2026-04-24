@@ -132,7 +132,10 @@ fn test_admin_removed_event_fields() {
             .map(|e| e.admin == admin2)
             .unwrap_or(false)
     });
-    assert!(found, "ADMIN REMOVED event missing or has wrong admin field");
+    assert!(
+        found,
+        "ADMIN REMOVED event missing or has wrong admin field"
+    );
 }
 
 #[test]
@@ -474,9 +477,7 @@ fn test_fee_paid_event_fields() {
     let events = env.events().all();
     let found = events.iter().any(|(_, _, data)| {
         decode_event::<FeePaidEvent>(&env, &data)
-            .map(|e| {
-                e.project_id == project_id && e.payer == owner && e.amount == 200u128
-            })
+            .map(|e| e.project_id == project_id && e.payer == owner && e.amount == 200u128)
             .unwrap_or(false)
     });
     assert!(
@@ -586,9 +587,7 @@ fn test_verification_approved_event_fields() {
     let found = events.iter().any(|(_, _, data)| {
         decode_event::<VerificationApprovedEvent>(&env, &data)
             .map(|e| {
-                e.project_id == project_id
-                    && e.admin == admin
-                    && e.timestamp == TEST_TIMESTAMP
+                e.project_id == project_id && e.admin == admin && e.timestamp == TEST_TIMESTAMP
             })
             .unwrap_or(false)
     });
@@ -628,9 +627,7 @@ fn test_verification_rejected_event_fields() {
     let found = events.iter().any(|(_, _, data)| {
         decode_event::<VerificationRejectedEvent>(&env, &data)
             .map(|e| {
-                e.project_id == project_id
-                    && e.admin == admin
-                    && e.timestamp == TEST_TIMESTAMP
+                e.project_id == project_id && e.admin == admin && e.timestamp == TEST_TIMESTAMP
             })
             .unwrap_or(false)
     });

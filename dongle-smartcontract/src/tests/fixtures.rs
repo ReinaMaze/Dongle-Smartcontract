@@ -23,7 +23,10 @@ pub fn generate_test_users(env: &Env, count: u32) -> Vec<Address> {
     users
 }
 
-pub fn setup_with_fees(env: &Env, fee_amount: u128) -> (DongleContractClient<'_>, Address, Address) {
+pub fn setup_with_fees(
+    env: &Env,
+    fee_amount: u128,
+) -> (DongleContractClient<'_>, Address, Address) {
     let (client, admin) = setup_contract(env);
     let treasury = Address::generate(env);
     client

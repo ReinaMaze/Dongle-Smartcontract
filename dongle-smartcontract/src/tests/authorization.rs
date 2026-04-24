@@ -22,15 +22,17 @@ fn setup(env: &Env) -> (DongleContractClient<'_>, Address) {
 
 fn register_project(client: &DongleContractClient, owner: &Address, name: &str) -> u64 {
     let env = &client.env;
-    client.mock_all_auths().register_project(&ProjectRegistrationParams {
-        owner: owner.clone(),
-        name: String::from_str(env, name),
-        description: String::from_str(env, "Description"),
-        category: String::from_str(env, "DeFi"),
-        website: None,
-        logo_cid: None,
-        metadata_cid: None,
-    })
+    client
+        .mock_all_auths()
+        .register_project(&ProjectRegistrationParams {
+            owner: owner.clone(),
+            name: String::from_str(env, name),
+            description: String::from_str(env, "Description"),
+            category: String::from_str(env, "DeFi"),
+            website: None,
+            logo_cid: None,
+            metadata_cid: None,
+        })
 }
 
 fn setup_with_token(

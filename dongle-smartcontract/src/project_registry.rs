@@ -75,9 +75,10 @@ impl ProjectRegistry {
             .get(&StorageKey::OwnerProjects(params.owner.clone()))
             .unwrap_or_else(|| Vec::new(env));
         owner_projects.push_back(count);
-        env.storage()
-            .persistent()
-            .set(&StorageKey::OwnerProjects(params.owner.clone()), &owner_projects);
+        env.storage().persistent().set(
+            &StorageKey::OwnerProjects(params.owner.clone()),
+            &owner_projects,
+        );
 
         publish_project_registered_event(
             env,
@@ -90,9 +91,12 @@ impl ProjectRegistry {
         Ok(count)
     }
 
-    pub fn update_project(env: &Env, params: ProjectUpdateParams) -> Result<Project, ContractError> {
-        let mut project = Self::get_project(env, params.project_id)
-            .ok_or(ContractError::ProjectNotFound)?;
+    pub fn update_project(
+        env: &Env,
+        params: ProjectUpdateParams,
+    ) -> Result<Project, ContractError> {
+        let mut project =
+            Self::get_project(env, params.project_id).ok_or(ContractError::ProjectNotFound)?;
 
         require_owner_auth(&params.caller, &project.owner)?;
 

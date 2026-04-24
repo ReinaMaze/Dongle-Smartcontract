@@ -20,10 +20,7 @@ pub fn require_admin_auth(env: &Env, caller: &Address) -> Result<(), ContractErr
 /// Require that `caller` has signed this invocation AND matches `expected_owner`.
 ///
 /// Used by: `update_project`, `request_verification`.
-pub fn require_owner_auth(
-    caller: &Address,
-    expected_owner: &Address,
-) -> Result<(), ContractError> {
+pub fn require_owner_auth(caller: &Address, expected_owner: &Address) -> Result<(), ContractError> {
     caller.require_auth();
     if caller != expected_owner {
         return Err(ContractError::Unauthorized);

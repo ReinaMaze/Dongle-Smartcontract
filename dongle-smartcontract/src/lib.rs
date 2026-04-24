@@ -1,7 +1,7 @@
 #![no_std]
 
-pub mod auth;
 mod admin_manager;
+pub mod auth;
 pub mod constants;
 pub mod errors;
 pub mod events;
