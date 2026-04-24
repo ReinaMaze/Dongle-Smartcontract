@@ -19,7 +19,7 @@ use soroban_sdk::{
 const TEST_TIMESTAMP: u64 = 1_700_000_000;
 
 fn setup(env: &Env) -> (DongleContractClient<'_>, Address) {
-    let contract_id = env.register_contract(None, DongleContract);
+    let contract_id = env.register(DongleContract, ());
     let client = DongleContractClient::new(env, &contract_id);
     let admin = Address::generate(env);
     client.mock_all_auths().initialize(&admin);
@@ -66,7 +66,7 @@ fn decode_event<T: soroban_sdk::TryFromVal<Env, soroban_sdk::Val>>(
 #[test]
 fn test_admin_added_event_on_initialize() {
     let env = Env::default();
-    let contract_id = env.register_contract(None, DongleContract);
+    let contract_id = env.register(DongleContract, ());
     let client = DongleContractClient::new(&env, &contract_id);
     let admin = Address::generate(&env);
 

@@ -13,7 +13,7 @@ use soroban_sdk::{testutils::Address as _, Address, Env, String};
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
 fn setup(env: &Env) -> (DongleContractClient<'_>, Address) {
-    let contract_id = env.register_contract(None, DongleContract);
+    let contract_id = env.register(DongleContract, ());
     let client = DongleContractClient::new(env, &contract_id);
     let admin = Address::generate(env);
     client.mock_all_auths().initialize(&admin);
@@ -287,7 +287,7 @@ fn test_request_verification_by_non_owner_fails() {
     let owner = Address::generate(&env);
     let attacker = Address::generate(&env);
 
-    let (token_address, project_id) = setup_with_token(&env, &client, &admin, &owner, 100);
+    let (_token_address, project_id) = setup_with_token(&env, &client, &admin, &owner, 100);
 
     // attacker tries to request verification for owner's project
     let result = client.try_request_verification(
