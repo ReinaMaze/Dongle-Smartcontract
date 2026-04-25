@@ -13,14 +13,15 @@ impl ProjectRegistry {
     ) -> Result<u64, ContractError> {
         params.owner.require_auth();
 
+        // Validate inputs - return typed errors instead of panicking
         if params.name.is_empty() {
-            panic!("InvalidProjectName");
+            return Err(ContractError::InvalidProjectName);
         }
         if params.description.is_empty() {
-            panic!("InvalidProjectDescription");
+            return Err(ContractError::InvalidProjectDescription);
         }
         if params.category.is_empty() {
-            panic!("InvalidProjectCategory");
+            return Err(ContractError::InvalidProjectCategory);
         }
 
         // Check if project name already exists
@@ -77,21 +78,35 @@ impl ProjectRegistry {
         Ok(count)
     }
 
-    pub fn update_project(env: &Env, params: ProjectUpdateParams) -> Option<Project> {
-        let mut project = Self::get_project(env, params.project_id)?;
+    pub fn update_project(
+        env: &Env,
+        params: ProjectUpdateParams,
+    ) -> Result<Project, ContractError> {
+        let mut project = Self::get_project(env, params.project_id)
+            .ok_or(ContractError::ProjectNotFound)?;
 
         params.caller.require_auth();
         if project.owner != params.caller {
-            return None;
+            return Err(ContractError::Unauthorized);
         }
 
+        // Validate and update fields
         if let Some(value) = params.name {
+            if value.is_empty() {
+                return Err(ContractError::InvalidProjectName);
+            }
             project.name = value;
         }
         if let Some(value) = params.description {
+            if value.is_empty() {
+                return Err(ContractError::InvalidProjectDescription);
+            }
             project.description = value;
         }
         if let Some(value) = params.category {
+            if value.is_empty() {
+                return Err(ContractError::InvalidProjectCategory);
+            }
             project.category = value;
         }
         if let Some(value) = params.website {
@@ -109,7 +124,7 @@ impl ProjectRegistry {
             .persistent()
             .set(&StorageKey::Project(params.project_id), &project);
 
-        Some(project)
+        Ok(project)
     }
 
     pub fn get_project(env: &Env, project_id: u64) -> Option<Project> {
