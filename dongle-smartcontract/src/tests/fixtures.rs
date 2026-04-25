@@ -11,11 +11,13 @@ use soroban_sdk::{testutils::Address as _, Address, Env, String, Vec};
 /// Initialize contract with a default admin and return client + admin address.
 ///
 /// This is the most basic setup function used by most tests.
-pub fn setup_contract(env: &Env) -> (DongleContractClient, Address) {
+pub fn setup_contract(env: &Env) -> (DongleContractClient<'_>, Address) {
     let contract_id = env.register_contract(None, DongleContract);
     let client = DongleContractClient::new(env, &contract_id);
     let admin = Address::generate(env);
+
     client.mock_all_auths().initialize(&admin);
+
     (client, admin)
 }
 
