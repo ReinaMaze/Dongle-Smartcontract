@@ -3,6 +3,7 @@
 // Existing test modules
 mod admin;
 mod registration;
+mod review;
 mod verification;
 
 // New test modules
