@@ -41,6 +41,34 @@ pub enum ContractError {
     CannotRemoveLastAdmin = 17,
     /// Admin not found
     AdminNotFound = 18,
+    /// Invalid project name
+    InvalidProjectName = 19,
+    /// Invalid description
+    InvalidDescription = 20,
+    /// Description too long
+    DescriptionTooLong = 21,
+    /// Invalid category
+    InvalidCategory = 22,
+    /// Category too long
+    CategoryTooLong = 23,
+    /// Invalid category format
+    InvalidCategoryFormat = 24,
+    /// Invalid website URL
+    InvalidWebsiteUrl = 25,
+    /// Website URL too long
+    WebsiteUrlTooLong = 26,
+    /// Invalid website URL format
+    InvalidWebsiteUrlFormat = 27,
+    /// Invalid CID
+    InvalidCid = 28,
+    /// CID invalid length
+    CidInvalidLength = 29,
+    /// Invalid CID format
+    InvalidCidFormat = 30,
+    /// Invalid pagination limit
+    InvalidPaginationLimit = 31,
+    /// Pagination limit too large
+    PaginationLimitTooLarge = 32,
 }
 
 // Legacy alias to avoid breaking any code that uses `Error` directly

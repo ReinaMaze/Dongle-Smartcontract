@@ -1,11 +1,11 @@
 //! Review registry: create/update/delete reviews and maintain aggregates and indexes.
 
-use crate::constants::{RATING_MAX, RATING_MIN};
 use crate::errors::ContractError;
 use crate::events::publish_review_event;
 use crate::rating_calculator::RatingCalculator;
 use crate::storage_keys::StorageKey;
 use crate::types::{ProjectStats, Review, ReviewAction};
+use crate::validation;
 use soroban_sdk::{Address, Env, String, Vec};
 
 pub struct ReviewRegistry;
@@ -20,9 +20,9 @@ impl ReviewRegistry {
     ) -> Result<(), ContractError> {
         reviewer.require_auth();
 
-        if !(RATING_MIN..=RATING_MAX).contains(&rating) {
-            return Err(ContractError::InvalidRating);
-        }
+        // Validate inputs
+        validation::validate_rating(rating)?;
+        validation::validate_cid(&comment_cid)?;
 
         let review_key = StorageKey::Review(project_id, reviewer.clone());
         if env.storage().persistent().has(&review_key) {
@@ -107,9 +107,9 @@ impl ReviewRegistry {
     ) -> Result<(), ContractError> {
         reviewer.require_auth();
 
-        if !(RATING_MIN..=RATING_MAX).contains(&rating) {
-            return Err(ContractError::InvalidRating);
-        }
+        // Validate inputs
+        validation::validate_rating(rating)?;
+        validation::validate_cid(&comment_cid)?;
 
         let review_key = StorageKey::Review(project_id, reviewer.clone());
         let mut review: Review = env
@@ -266,6 +266,11 @@ impl ReviewRegistry {
     }
 
     pub fn list_reviews(env: &Env, project_id: u64, start_id: u32, limit: u32) -> Vec<Review> {
+        // Validate pagination
+        if validation::validate_pagination(limit).is_err() {
+            return Vec::new(env);
+        }
+
         let reviewers: Vec<Address> = env
             .storage()
             .persistent()

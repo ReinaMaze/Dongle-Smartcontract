@@ -3,6 +3,7 @@
 // Existing test modules
 mod admin;
 mod registration;
+mod validation_tests;
 mod verification;
 
 // Test infrastructure

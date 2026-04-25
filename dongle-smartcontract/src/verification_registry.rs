@@ -10,6 +10,7 @@ use crate::fee_manager::FeeManager;
 use crate::project_registry::ProjectRegistry;
 use crate::storage_keys::StorageKey;
 use crate::types::{VerificationRecord, VerificationStatus};
+use crate::validation;
 use soroban_sdk::{Address, Env, String};
 
 pub struct VerificationRegistry;
@@ -41,8 +42,8 @@ impl VerificationRegistry {
         // 3. Consume fee payment
         FeeManager::consume_fee_payment(env, project_id)?;
 
-        // 4. Validate evidence
-        Self::validate_evidence_cid(&evidence_cid)?;
+        // 4. Validate evidence CID
+        validation::validate_evidence_cid(&evidence_cid)?;
 
         // 5. Create record
         let config = FeeManager::get_fee_config(env)?;
@@ -155,13 +156,6 @@ impl VerificationRegistry {
             .persistent()
             .get(&StorageKey::Verification(project_id))
             .ok_or(ContractError::VerificationNotFound)
-    }
-
-    pub fn validate_evidence_cid(evidence_cid: &String) -> Result<(), ContractError> {
-        if evidence_cid.is_empty() {
-            return Err(ContractError::InvalidProjectData);
-        }
-        Ok(())
     }
 
     #[allow(dead_code)]
