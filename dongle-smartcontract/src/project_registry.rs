@@ -179,8 +179,7 @@ impl ProjectRegistry {
 #[cfg(test)]
 mod tests {
     use crate::errors::ContractError;
-    use crate::project_registry::ProjectRegistry;
-    use soroban_sdk::{Address, Env, String};
+    use soroban_sdk::{Env, String};
 
     // Validation function only used in tests
     fn validate_project_data(
