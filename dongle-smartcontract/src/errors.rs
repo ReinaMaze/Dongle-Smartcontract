@@ -41,6 +41,10 @@ pub enum ContractError {
     CannotRemoveLastAdmin = 17,
     /// Admin not found
     AdminNotFound = 18,
+    /// Invalid verification status transition with details
+    InvalidStatusTransition = 19,
+    /// Contract already initialized
+    AlreadyInitialized = 20,
 }
 
 // Legacy alias to avoid breaking any code that uses `Error` directly

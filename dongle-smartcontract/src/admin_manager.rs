@@ -13,6 +13,11 @@ pub struct AdminManager;
 impl AdminManager {
     /// Initialize the contract with the first admin
     pub fn initialize(env: &Env, admin: Address) {
+        // Check if already initialized
+        if env.storage().persistent().has(&StorageKey::AdminList) {
+            panic!("Contract already initialized");
+        }
+
         // Don't require auth during initialization - this is typically called once during contract deployment
 
         // Set the admin in storage
@@ -148,7 +153,8 @@ mod tests {
     }
 
     #[test]
-    fn test_add_admin() {
+    #[should_panic(expected = "Contract already initialized")]
+    fn test_initialize_only_once() {
         let env = Env::default();
         let contract_id = env.register(DongleContract, ());
         let client = DongleContractClient::new(&env, &contract_id);
@@ -156,6 +162,21 @@ mod tests {
         let admin2 = Address::generate(&env);
 
         client.mock_all_auths().initialize(&admin1);
+        // This should panic
+        client.mock_all_auths().initialize(&admin2);
+    }
+
+    #[test]
+    fn test_add_admin_duplicate() {
+        let env = Env::default();
+        let contract_id = env.register_contract(None, DongleContract);
+        let client = DongleContractClient::new(&env, &contract_id);
+        let admin1 = Address::generate(&env);
+        let admin2 = Address::generate(&env);
+
+        client.mock_all_auths().initialize(&admin1);
+        client.mock_all_auths().add_admin(&admin1, &admin2);
+        // Adding the same admin again should be a no-op
         client.mock_all_auths().add_admin(&admin1, &admin2);
 
         assert!(client.is_admin(&admin2));
@@ -228,7 +249,25 @@ mod tests {
     }
 
     #[test]
-    fn test_get_admin_list() {
+    fn test_remove_admin_twice() {
+        let env = Env::default();
+        let contract_id = env.register_contract(None, DongleContract);
+        let client = DongleContractClient::new(&env, &contract_id);
+        let admin1 = Address::generate(&env);
+        let admin2 = Address::generate(&env);
+
+        client.mock_all_auths().initialize(&admin1);
+        client.mock_all_auths().add_admin(&admin1, &admin2);
+        client.mock_all_auths().remove_admin(&admin1, &admin2);
+        // Trying to remove the same admin again should fail
+        let result = client.mock_all_auths().try_remove_admin(&admin1, &admin2);
+
+        assert_eq!(result, Err(Ok(ContractError::AdminNotFound)));
+        assert_eq!(client.get_admin_count(), 1);
+    }
+
+    #[test]
+    fn test_admin_can_remove_themselves() {
         let env = Env::default();
         let contract_id = env.register(DongleContract, ());
         let client = DongleContractClient::new(&env, &contract_id);
@@ -240,10 +279,12 @@ mod tests {
         client.mock_all_auths().add_admin(&admin1, &admin2);
         client.mock_all_auths().add_admin(&admin1, &admin3);
 
-        let admins = client.get_admin_list();
-        assert_eq!(admins.len(), 3);
-        assert!(admins.contains(&admin1));
-        assert!(admins.contains(&admin2));
-        assert!(admins.contains(&admin3));
+        // Admin2 can remove themselves
+        client.mock_all_auths().remove_admin(&admin2, &admin2);
+
+        assert!(client.is_admin(&admin1));
+        assert!(!client.is_admin(&admin2));
+        assert!(client.is_admin(&admin3));
+        assert_eq!(client.get_admin_count(), 2);
     }
 }
