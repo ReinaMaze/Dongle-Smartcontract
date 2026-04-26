@@ -69,15 +69,15 @@ impl AdminManager {
     ) -> Result<(), ContractError> {
         require_admin_auth(env, &caller)?;
 
+        // Check if the address is actually an admin first
+        if !Self::is_admin(env, &admin_to_remove) {
+            return Err(ContractError::AdminNotFound);
+        }
+
         // Prevent removing the last admin
         let admins = Self::get_admin_list(env);
         if admins.len() <= 1 {
             return Err(ContractError::CannotRemoveLastAdmin);
-        }
-
-        // Check if the address is actually an admin
-        if !Self::is_admin(env, &admin_to_remove) {
-            return Err(ContractError::AdminNotFound);
         }
 
         // Remove from admin mapping

@@ -199,18 +199,18 @@ impl VerificationRegistry {
     ) -> Result<(), ContractError> {
         require_admin_auth(env, &admin)?;
 
-        // Get project first to check its status
+        // Get project
         let mut project =
             ProjectRegistry::get_project(env, project_id).ok_or(ContractError::ProjectNotFound)?;
 
-        // Validate state transition from project status first
+        // Get verification record first - returns VerificationNotFound if missing
+        let mut record = Self::get_verification(env, project_id)?;
+
+        // Then validate state transition
         VerificationStateMachine::validate_transition(
             project.verification_status,
             VerificationStatus::Verified,
         )?;
-
-        // Get verification record
-        let mut record = Self::get_verification(env, project_id)?;
 
         let now = env.ledger().timestamp();
 
@@ -238,18 +238,18 @@ impl VerificationRegistry {
     ) -> Result<(), ContractError> {
         require_admin_auth(env, &admin)?;
 
-        // Get project first to check its status
+        // Get project
         let mut project =
             ProjectRegistry::get_project(env, project_id).ok_or(ContractError::ProjectNotFound)?;
 
-        // Validate state transition from project status first
+        // Get verification record first - returns VerificationNotFound if missing
+        let mut record = Self::get_verification(env, project_id)?;
+
+        // Then validate state transition
         VerificationStateMachine::validate_transition(
             project.verification_status,
             VerificationStatus::Rejected,
         )?;
-
-        // Get verification record
-        let mut record = Self::get_verification(env, project_id)?;
 
         let now = env.ledger().timestamp();
 

@@ -217,13 +217,13 @@ fn test_invalid_transitions_from_unverified() {
 
     let project_id = setup_project_with_fee(&client, &env, &admin, &owner, "Project Invalid 1");
 
-    // Cannot approve directly from Unverified
+    // Cannot approve directly from Unverified - no verification record exists
     let result = client.try_approve_verification(&project_id, &admin);
-    assert_eq!(result, Err(Ok(ContractError::InvalidStatusTransition)));
+    assert_eq!(result, Err(Ok(ContractError::VerificationNotFound)));
 
-    // Cannot reject directly from Unverified
+    // Cannot reject directly from Unverified - no verification record exists
     let result = client.try_reject_verification(&project_id, &admin);
-    assert_eq!(result, Err(Ok(ContractError::InvalidStatusTransition)));
+    assert_eq!(result, Err(Ok(ContractError::VerificationNotFound)));
 }
 
 #[test]
